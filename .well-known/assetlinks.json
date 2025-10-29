@@ -10,5 +10,17 @@
                 "7A:28:E2:21:EB:B6:6F:31:96:9F:E2:C0:09:80:E0:CE:4A:E7:52:FE:FC:4A:DF:DA:7E:F4:2F:CD:AA:74:A2:5A"
             ]
         }
+    },
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.arvin.test.passkeydemo",
+            "sha256_cert_fingerprints": [
+                "64:EF:BF:67:80:F2:AC:51:D8:D6:CF:98:D9:1A:E4:82:83:7A:59:CB:8E:CC:93:44:D7:63:AD:CC:B4:78:D6:AA"
+            ]
+        }
     }
 ]
