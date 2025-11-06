@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Passkey Test</title>
+</head>
+<body>
+  <button id="create">Create Passkey</button>
+  <button id="get">Get Passkey</button>
+  <pre id="output"></pre>
+<script>
+const isWebView = /wv/.test(navigator.userAgent);
+
+async function createPasskey() {
+  const options = {
+    publicKey: {
+      challenge: new Uint8Array(32),
+      rp: { id: "rvnmrqz-fnstr.github.io", name: "PassKey Demo" },
+      user: { id: new Uint8Array(16), name: "user@example.com", displayName: "Test User" },
+      pubKeyCredParams: [{ type: "public-key", alg: -7 }]
+    }
+  };
+
+  if (isWebView && window.PasskeyHandler) {
+    window.PasskeyHandler.postMessage(JSON.stringify({ action: "create", data: options }));
+  } else {
+    const cred = await navigator.credentials.create(options);
+    document.getElementById('output').textContent = "Created: " + JSON.stringify(cred);
+  }
+}
+
+async function getPasskey() {
+  const options = {
+    publicKey: {
+      challenge: new Uint8Array(32),
+      allowCredentials: []
+    }
+  };
+
+  if (isWebView && window.PasskeyHandler) {
+    window.PasskeyHandler.postMessage(JSON.stringify({ action: "get", data: options }));
+  } else {
+    const cred = await navigator.credentials.get(options);
+    document.getElementById('output').textContent = "Got: " + JSON.stringify(cred);
+  }
+}
+
+document.getElementById('create').onclick = createPasskey;
+document.getElementById('get').onclick = getPasskey;
+
+window.addEventListener("message", e => {
+  document.getElementById('output').textContent = e.data;
+});
+</script>
+</body>
+</html>
