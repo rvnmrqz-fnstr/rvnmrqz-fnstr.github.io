@@ -13,7 +13,7 @@ const isWebView = /wv/.test(navigator.userAgent);
 async function createPasskey() {
   const options = {
     publicKey: {
-      challenge: new Uint8Array(32),
+      challenge: generateChallenge64(),
       rp: { id: "rvnmrqz-fnstr.github.io", name: "PassKey Demo" },
       user: { id: new Uint8Array(16), name: "user@example.com", displayName: "Test User" },
       pubKeyCredParams: [{ type: "public-key", alg: -7 }]
@@ -31,7 +31,7 @@ async function createPasskey() {
 async function getPasskey() {
   const options = {
     publicKey: {
-      challenge: new Uint8Array(32),
+      challenge: generateChallenge64(),
       allowCredentials: []
     }
   };
@@ -42,6 +42,16 @@ async function getPasskey() {
     const cred = await navigator.credentials.get(options);
     document.getElementById('output').textContent = "Got: " + JSON.stringify(cred);
   }
+}
+
+function generateChallenge64(){
+  const challenge = new Uint8Array(32);
+  crypto.getRandomValues(challenge);
+
+  return btoa(String.fromCharCode(...challenge))
+    .replace(/\+/g,"-")
+    .replace(/\//g,"_")
+    .replace(/=+$/,"");
 }
 
 document.getElementById('create').onclick = createPasskey;
