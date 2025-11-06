@@ -15,9 +15,18 @@ async function createPasskey() {
     publicKey: {
       challenge: generateChallenge64(),
       rp: { id: "rvnmrqz-fnstr.github.io", name: "PassKey Demo" },
-      user: { id: new Uint8Array(16), name: "user@example.com", displayName: "Test User" },
+      user: { 
+        id: new Uint8Array(16), 
+        name: "user@example.com", 
+        displayName: "Test User" 
+      },
       pubKeyCredParams: [{ type: "public-key", alg: -7 }],
-      attestation: "none"
+      attestation: "none",
+      timeout: 180000,
+      authenticatorSelection: {
+        residentKey: "required",
+        userVerification: "required"
+      }
     }
   };
 
