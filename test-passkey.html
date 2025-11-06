@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Passkey Test</title>
+</head>
+<body>
+  <button id="create">Create Passkey</button>
+  <button id="get">Get Passkey</button>
+  <pre id="output"></pre>
+  <script>
+    document.getElementById('create').onclick = async () => {
+      try {
+        const cred = await navigator.credentials.create({
+          publicKey: {
+            challenge: new Uint8Array(32),
+            rp: { name: "Test RP" },
+            user: {
+              id: new Uint8Array(16),
+              name: "user@example.com",
+              displayName: "Test User"
+            },
+            pubKeyCredParams: [{ type: "public-key", alg: -7 }]
+          }
+        });
+        document.getElementById('output').textContent = "Created: " + JSON.stringify(cred);
+      } catch (e) {
+        document.getElementById('output').textContent = "Error: " + e;
+      }
+    };
+
+    document.getElementById('get').onclick = async () => {
+      try {
+        const cred = await navigator.credentials.get({
+          publicKey: {
+            challenge: new Uint8Array(32),
+            allowCredentials: []
+          }
+        });
+        document.getElementById('output').textContent = "Got: " + JSON.stringify(cred);
+      } catch (e) {
+        document.getElementById('output').textContent = "Error: " + e;
+      }
+    };
+  </script>
+</body>
+</html>
