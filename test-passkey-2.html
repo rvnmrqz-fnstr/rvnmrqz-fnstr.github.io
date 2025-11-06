@@ -8,12 +8,29 @@
   <button id="get">Get Passkey</button>
   <pre id="output"></pre>
 <script>
-const isWebView = false; // /wv/.test(navigator.userAgent);
+const isWebView = /wv/.test(navigator.userAgent);
+
+
+function generateChallenge(){
+  const challenge = new Uint8Array(32);
+  crypto.getRandomValues(challenge);
+
+
+  if(!isWebView) 
+    return challenge
+  else { 
+    return btoa(String.fromCharCode(...challenge))
+    .replace(/\+/g,"-")
+    .replace(/\//g,"_")
+    .replace(/=+$/,""); 
+  }
+}
+
 
 async function createPasskey() {
   const options = {
     publicKey: {
-      challenge: generateChallenge64(),
+      challenge: generateChallenge(),
       rp: { id: "rvnmrqz-fnstr.github.io", name: "PassKey Demo" },
       user: { 
         id: new Uint8Array(16), 
@@ -41,7 +58,7 @@ async function createPasskey() {
 async function getPasskey() {
   const options = {
     publicKey: {
-      challenge: generateChallenge64(),
+      challenge: generateChallenge(),
       allowCredentials: [],
       rpId: "rvnmrqz-fnstr.github.io",
       userVerification: "required"
@@ -56,15 +73,6 @@ async function getPasskey() {
   }
 }
 
-function generateChallenge64(){
-  const challenge = new Uint8Array(32);
-  crypto.getRandomValues(challenge);
-
-  return btoa(String.fromCharCode(...challenge))
-    .replace(/\+/g,"-")
-    .replace(/\//g,"_")
-    .replace(/=+$/,"");
-}
 
 document.getElementById('create').onclick = createPasskey;
 document.getElementById('get').onclick = getPasskey;
