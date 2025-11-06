@@ -8,7 +8,7 @@
   <button id="get">Get Passkey</button>
   <pre id="output"></pre>
 <script>
-const isWebView = /wv/.test(navigator.userAgent);
+const isWebView = false; // /wv/.test(navigator.userAgent);
 
 async function createPasskey() {
   const options = {
