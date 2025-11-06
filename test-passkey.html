@@ -13,7 +13,10 @@
         const cred = await navigator.credentials.create({
           publicKey: {
             challenge: new Uint8Array(32),
-            rp: { name: "Test RP" },
+            rp: { 
+              id: "rvnmrqz-fnstr.github.io",
+              name: "PassKey Demo" 
+            },
             user: {
               id: new Uint8Array(16),
               name: "user@example.com",
